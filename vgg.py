@@ -55,12 +55,12 @@ y_train = y_train[:-10000]
 
 
 model = create_model()
-epochs = 10
-lrate = 0.01
+epochs = 15
+lrate = 0.001
 decay = lrate/epochs
 sgd = SGD(lr=lrate, momentum=0.9, decay=decay, nesterov=False)
 model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
-hist = model_training_generator(model,x_train,y_train,validation=True,x_val=x_val,y_val=y_val)
+hist = model_training_generator(model,x_train,y_train,validation=True,x_val=x_val,y_val=y_val,epochs=epochs)
 model_json = model.to_json()
 with open("vgg_model.json", "w") as json_file:
     json_file.write(model_json)

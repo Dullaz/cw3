@@ -60,11 +60,11 @@ epochs=10
 lrate = 0.01
 decay = lrate/epochs
 optimizer = SGD(lr=lrate,decay=decay,momentum=0.9,nesterov=False)
-m.compile(optimizer=SGD,loss=keras.losses.categorical_crossentropy,metrics=['accuracy'])
+m.compile(optimizer='adam',loss=keras.losses.categorical_crossentropy,metrics=['accuracy'])
 m.summary()
 
 #hist = m.fit(x_train,y_train,batch_size=16,steps_per_epoch=x_train.shape[0]/32,epochs=10,verbose=1)
-hist = model_training_generator(m,x_train,y_train,validation=True,x_val=x_val,y_val=y_val)
+hist = model_training_generator(m,x_train,y_train,validation=True,x_val=x_val,y_val=y_val,epochs=epochs)
 model_json = m.to_json()
 with open("resnet_model.json", "w") as json_file:
     json_file.write(model_json)
