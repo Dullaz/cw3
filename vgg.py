@@ -15,7 +15,7 @@ import pickle
 vgg_path="vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5"
 def create_model():
     model = Sequential()
-    model.add(tf.keras.applications.vgg16.VGG16(include_top=False, weights=vgg_path, pooling='avg'))
+    model.add(tf.keras.applications.vgg16.VGG16(include_top=False, weights=None, pooling='avg'))
     model.add(Dropout(0.50))
     model.add(Dense(10,activation="softmax"))
     return model

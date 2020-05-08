@@ -17,7 +17,7 @@ resnet_path = './resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5'
 def create_model():
     shape=(32,32,3)
     model = Sequential()
-    model.add(ResNet50(include_top=False,pooling='avg',weights=resnet_path))
+    model.add(ResNet50(include_top=False,pooling='avg',weights=None))
     model.add(Dropout(0.50))
     model.add(Dense(10,activation="softmax"))
     return model
@@ -56,7 +56,7 @@ x_train = x_train[:-10000]
 y_train = y_train[:-10000]
 
 m = create_model()
-epochs=10
+epochs=15
 lrate = 0.01
 decay = lrate/epochs
 optimizer = SGD(lr=lrate,decay=decay,momentum=0.9,nesterov=False)
