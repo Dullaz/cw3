@@ -15,7 +15,7 @@ import pickle
 vgg_path="vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5"
 def create_model():
     model = Sequential()
-    model.add(tf.keras.applications.vgg16.VGG16(include_top=False, weights=None, pooling='avg'))
+    model.add(tf.keras.applications.vgg16.VGG16(include_top=False, weights=vgg_path, pooling='avg'))
     model.add(Dropout(0.50))
     model.add(Dense(10,activation="softmax"))
     return model
@@ -59,13 +59,13 @@ epochs = 15
 lrate = 0.001
 decay = lrate/epochs
 sgd = SGD(lr=lrate, momentum=0.9, decay=decay, nesterov=False)
-model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
+model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 hist = model_training_generator(model,x_train,y_train,validation=True,x_val=x_val,y_val=y_val,epochs=epochs)
 model_json = model.to_json()
-with open("vgg_model.json", "w") as json_file:
+with open("vgg_model_adam_weighted.json", "w") as json_file:
     json_file.write(model_json)
-model.save_weights(os.path.join(os.getcwd(), 'vgg_model.h5'))
-pickle.dump(hist.history,open("hist.p","wb"))
+model.save_weights(os.path.join(os.getcwd(), 'vgg_model_adam_weighted.h5'))
+pickle.dump(hist.history,open("hist_vgg_adam_weighted.p","wb"))
 results = model.evaluate(x_test,y_test,batch_size=32)
 print("ResNet Evaluation")
 print("test loss, test acc: ", results)
