@@ -56,20 +56,20 @@ x_train = x_train[:-10000]
 y_train = y_train[:-10000]
 
 m = create_model()
-epochs=15
-lrate = 0.01
+epochs=50
+lrate = 0.005
 decay = lrate/epochs
-sgd = SGD(lr=lrate,decay=decay,momentum=0.9,nesterov=False)
+sgd = SGD(lr=lrate,decay=decay,momentum=0.9,nesterov=True)
 m.compile(optimizer=sgd,loss=keras.losses.categorical_crossentropy,metrics=['accuracy'])
 m.summary()
 
 #hist = m.fit(x_train,y_train,batch_size=16,steps_per_epoch=x_train.shape[0]/32,epochs=10,verbose=1)
 hist = model_training_generator(m,x_train,y_train,validation=True,x_val=x_val,y_val=y_val,epochs=epochs)
 model_json = m.to_json()
-with open("resnet_model_sgd_weighted.json", "w") as json_file:
+with open("resnet_model_sgd_weighted_nesterov.json", "w") as json_file:
     json_file.write(model_json)
-m.save_weights(os.path.join(os.getcwd(), 'resnet_model_sgd_weighted.h5'))
-pickle.dump(hist.history,open("hist_res_sgd_weighted.p","wb"))
+m.save_weights(os.path.join(os.getcwd(), 'resnet_model_sgd_weighted_nesterov.h5'))
+pickle.dump(hist.history,open("hist_res_sgd_weighted_nesterov.p","wb"))
 results = m.evaluate(x_test,y_test,batch_size=32)
 print("ResNet Evaluation")
 print("test loss, test acc: ", results)
